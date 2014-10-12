@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\User;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
@@ -12,6 +13,8 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\rbac\PhpManager;
+
 
 /**
  * Site controller
@@ -38,6 +41,12 @@ class SiteController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    [
+                        'actions' => ['about'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+
                 ],
             ],
             'verbs' => [
@@ -67,6 +76,10 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
+
+
+
+
         return $this->render('index');
     }
 
@@ -113,7 +126,15 @@ class SiteController extends Controller
 
     public function actionAbout()
     {
-        return $this->render('about');
+
+        if(!\Yii::$app->user->can('about')){
+            echo '<pre>';
+            print_r('nahui');
+            die;
+        }else{
+            return $this->render('about');
+        }
+
     }
 
     public function actionSignup()

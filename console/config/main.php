@@ -21,6 +21,14 @@ return [
                 ],
             ],
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\PhpManager',
+            'defaultRoles' => ['admin', 'manager', 'employee'],
+            'itemFile' => '@common/components/rbac/items.php',
+            'assignmentFile' => '@common/components/rbac/assignments.php',
+            'ruleFile' => '@common/components/rbac/rules.php'
+        ],
+
     ],
     'params' => $params,
 ];

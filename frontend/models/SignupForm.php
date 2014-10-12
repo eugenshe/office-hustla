@@ -42,6 +42,11 @@ class SignupForm extends Model
      */
     public function signup()
     {
+
+        $auth = Yii::$app->authManager;
+        echo '<pre>';
+        print_r($auth);
+        die;
         if ($this->validate()) {
             $user = new User();
             $user->username = $this->username;
@@ -49,6 +54,12 @@ class SignupForm extends Model
             $user->setPassword($this->password);
             $user->generateAuthKey();
             $user->save();
+
+
+
+            $workerRole = $auth->getRole('worker');
+            $auth->assign($workerRole, $user->getId());
+
             return $user;
         }
 
