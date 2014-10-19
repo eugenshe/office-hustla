@@ -22,7 +22,8 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body>
+<body data-controller="<?= Yii::$app->controller->id ?>" data-action="<?= Yii::$app->controller->action->id ?>">
+
     <?php $this->beginBody() ?>
     <div class="wrap">
         <?php
@@ -70,6 +71,8 @@ AppAsset::register($this);
         <p class="pull-right"><?= Yii::powered() ?></p>
         </div>
     </footer>
+
+    <script data-main="js/app" src="/js/lib/require.js"></script>
 
     <?php $this->endBody() ?>
 </body>
