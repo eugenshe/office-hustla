@@ -5,6 +5,8 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\widgets\Alert;
+use frontend\widgets\RequireJS;
+
 
 /**
  * @var \yii\web\View $this
@@ -72,8 +74,8 @@ AppAsset::register($this);
         </div>
     </footer>
 
-    <script data-main="js/app" src="/js/lib/require.js"></script>
-
+   <!-- <script data-main="js/app" src="/js/lib/require.js"></script>-->
+    <?= RequireJS::widget(); ?>
     <?php $this->endBody() ?>
 </body>
 </html>
