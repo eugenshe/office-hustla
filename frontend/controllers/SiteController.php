@@ -10,10 +10,10 @@ use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
+use yii\web\HttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use yii\rbac\PhpManager;
 
 
 /**
@@ -29,12 +29,12 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                //'only' => ['logout', 'signup'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['signup', 'index'],
                         'allow' => true,
-                        'roles' => ['?'],
+                        'roles' => ['manager'],
                     ],
                     [
                         'actions' => ['logout'],
@@ -42,19 +42,22 @@ class SiteController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['about'],
+                        'actions' => ['login','error'],
+                        'allow' => true,
+                    ],
+                    [
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
 
                 ],
             ],
-            'verbs' => [
+            /*'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
                 ],
-            ],
+            ],*/
         ];
     }
 
@@ -84,6 +87,7 @@ class SiteController extends Controller
 
     public function actionLogin()
     {
+        $this->layout = 'login';
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -123,17 +127,18 @@ class SiteController extends Controller
         }
     }
 
+
     public function actionAbout()
     {
-
+/*
         if(!\Yii::$app->user->can('about')){
             echo '<pre>';
             print_r('nahui');
             die;
         }else{
             return $this->render('about');
-        }
-
+        }*/
+        return $this->render('about');
     }
 
     public function actionSignup()

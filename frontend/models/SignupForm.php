@@ -44,9 +44,7 @@ class SignupForm extends Model
     {
 
         $auth = Yii::$app->authManager;
-        echo '<pre>';
-        print_r($auth);
-        die;
+
         if ($this->validate()) {
             $user = new User();
             $user->username = $this->username;
@@ -56,8 +54,7 @@ class SignupForm extends Model
             $user->save();
 
 
-
-            $workerRole = $auth->getRole('worker');
+            $workerRole = $auth->getRole('employee');
             $auth->assign($workerRole, $user->getId());
 
             return $user;

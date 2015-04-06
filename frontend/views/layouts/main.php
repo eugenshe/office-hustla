@@ -1,82 +1,129 @@
 <?php
+use yii\helpers\Url;
+use yii\widgets\Menu;
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
+use frontend\assets\AdminAsset;
 use frontend\widgets\Alert;
 use frontend\widgets\RequireJS;
 
+/* @var $this \yii\web\View */
+/* @var $content string */
 
-/**
- * @var \yii\web\View $this
- * @var string $content
- */
+$controller = \Yii::$app->controller->id;
 AppAsset::register($this);
+AdminAsset::register($this);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?= Html::csrfMetaTags() ?>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title><?= Html::encode($this->title) ?></title>
+    <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
 </head>
-<body data-controller="<?= Yii::$app->controller->id ?>" data-action="<?= Yii::$app->controller->action->id ?>">
 
-    <?php $this->beginBody() ?>
-    <div class="wrap">
-        <?php
-            NavBar::begin([
-                'brandLabel' => 'My Company',
-                'brandUrl' => Yii::$app->homeUrl,
-                'options' => [
-                    'class' => 'navbar-inverse navbar-fixed-top',
+<body class="skin-black">
+<?php $this->beginBody() ?>
+
+
+<!-- header logo: style can be found in header.less -->
+<header class="header">
+    <a href="<?= Url::home(); ?>" class="logo">
+        Office Hustla
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </a>
+        <div class="navbar-right">
+            <ul class="nav navbar-nav">
+                <?php if (!Yii::$app->user->isGuest) { ?>
+                    <li><a class="btn-btn-default" href="<?= Url::to(['site/logout']); ?>">Log Out</a></li>
+                <?php } ?>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<div class="wrapper row-offcanvas row-offcanvas-left">
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="left-side sidebar-offcanvas">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- search form -->
+            <form action="#" method="get" class="sidebar-form">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search..."/>
+					<span class="input-group-btn">
+						<button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+					</span>
+                </div>
+            </form>
+            <!-- /.search form -->
+
+            <?= Menu::widget([
+                'options' => [ 'class' => 'sidebar-menu' ],
+                'encodeLabels' => false,
+                'submenuTemplate' => "\n<ul class=\"treeview-menu\">\n{items}\n</ul>\n",
+                'items' => [
+                    ['label' => '<i class="fa fa-dashboard"></i> <span>Dashboard</span>', 'url' => ['site/index']],
+                    /*['label' => '<i class="fa fa-dashboard"></i> <span>Vacancies</span>', 'url' => ['vacancy/index'],],*/
+
+                    ['label' => '<span>Vacancies</span><i class="fa fa-angle-left pull-right"></i>',
+                        'url' => ['vacancy/index'], 'options' => ['class' => 'treeview'],
+                        'active' => ($controller == 'vacancy'), 'items' => [
+                        ['label' => 'List', 'url' => ['vacancy/index']],
+                        ['label' => 'Create', 'url' => ['vacancy/create']],
+                    ]],
+
                 ],
-            ]);
-            $menuItems = [
-                ['label' => 'Home', 'url' => ['/site/index']],
-                ['label' => 'About', 'url' => ['/site/about']],
-                ['label' => 'Contact', 'url' => ['/site/contact']],
-            ];
-            if (Yii::$app->user->isGuest) {
-                $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-                $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
-            } else {
-                $menuItems[] = [
-                    'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                    'url' => ['/site/logout'],
-                    'linkOptions' => ['data-method' => 'post']
-                ];
-            }
-            echo Nav::widget([
-                'options' => ['class' => 'navbar-nav navbar-right'],
-                'items' => $menuItems,
-            ]);
-            NavBar::end();
-        ?>
+            ]); ?>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
 
-        <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
-        </div>
-    </div>
+    <!-- Right side column. Contains the navbar and content of the page -->
+    <aside class="right-side">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                <?= $this->title; ?>
+            </h1>
 
-    <footer class="footer">
-        <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-        <p class="pull-right"><?= Yii::powered() ?></p>
-        </div>
-    </footer>
+            <?= Breadcrumbs::widget([
+                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            ]) ?>
 
-   <!-- <script data-main="js/app" src="/js/lib/require.js"></script>-->
-    <?= RequireJS::widget(); ?>
-    <?php $this->endBody() ?>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <?= Alert::widget(); ?>
+            <?= $content ?>
+
+        </section><!-- /.content -->
+        <footer>
+
+        </footer>
+    </aside><!-- /.right-side -->
+</div><!-- ./wrapper -->
+
+<?= RequireJS::widget(); ?>
+<?php $this->endBody() ?>
+
 </body>
+
 </html>
 <?php $this->endPage() ?>
+

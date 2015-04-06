@@ -12,7 +12,7 @@ class UserRoleRule extends Rule
 
     public function execute($user, $item, $params)
     {
-        //Получаем массив пользователя из базы
+
         $user = ArrayHelper::getValue($params, 'user', User::findOne($user));
 
         if ($user) {
@@ -27,6 +27,10 @@ class UserRoleRule extends Rule
             }
             elseif ($item->name === 'employee') {
                 return $role == User::ROLE_ADMIN || $role == User::ROLE_MANAGER || $role == User::ROLE_EMPLOYEE;
+            }
+        }else {
+            if($item->name === 'guest') {
+                return true;
             }
         }
         return false;

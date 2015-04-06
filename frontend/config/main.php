@@ -42,6 +42,12 @@ return [
                 '/about' => 'site/about'
             ],
         ],
+        'view' => [
+            'theme' => [
+                'pathMap' => ['@app/views' => '@app/themes/adminlte'],
+                'baseUrl' => '@web/themes/adminlte',
+            ],
+        ],
     ],
     'params' => $params,
 ];

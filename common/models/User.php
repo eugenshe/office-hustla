@@ -2,7 +2,7 @@
 namespace common\models;
 
 use yii\base\NotSupportedException;
-use yii\db\ActiveRecord;
+use yii\mongodb\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
@@ -29,6 +29,7 @@ class User extends ActiveRecord implements IdentityInterface
     const ROLE_ADMIN = 'admin';
     const ROLE_EMPLOYEE = 'employee';
     const ROLE_MANAGER = 'manager';
+    const ROLE_GUEST = 'guest';
 
     /**
      * @inheritdoc
@@ -57,6 +58,14 @@ class User extends ActiveRecord implements IdentityInterface
 
          ];
      }
+
+    public function attributes() {
+        return [
+            '_id', 'auth_key','role', 'status', 'created_at', 'updated_at',
+            'name', 'username', 'last_name', 'first_name', 'password_hash'
+        ];
+    }
+
 
     /**
      * @inheritdoc
@@ -112,7 +121,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getId()
     {
-        return $this->getPrimaryKey();
+        return (string)$this->getPrimaryKey();
     }
 
     /**
